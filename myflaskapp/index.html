@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>My Pikmin App</title>
+        <style>
+            body { font-family: sans-serif; text-align: center; padding-top: 50px; }
+            img { max-width: 300px; display: block; margin: 20px auto; }
+            button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+        </style>
+    </head>
+    <body>
+        <h1>Hello from Pikmin!</h1>
+        
+        <img src="red-pikmin.png" alt="Red Pikmin" />
+
+        <audio id="pikminSound" src="Voicy_pikmin greet.mp3" preload="auto"></audio>
+
+        <div id="controls">
+            <button id="startButton">Click to Start Pikmin Sounds</button>
+            <p id="status"></p>
+        </div>
+
+        <script>
+            const pikminSound = document.getElementById("pikminSound");
+            const startButton = document.getElementById("startButton");
+            const statusText = document.getElementById("status");
+
+            function playRandomly() {
+                // Random delay between 3 and 10 seconds
+                const minDelay = 3000; 
+                const maxDelay = 10000; 
+                const randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+
+                statusText.innerText = `Next Pikmin sound in ${randomDelay / 1000} seconds.`;
+
+                setTimeout(() => {
+                    // Play the sound, then schedule the next one
+                    pikminSound.play().catch(e => console.error("Audio playback failed:", e));
+                    playRandomly(); 
+                }, randomDelay);
+            }
+
+            // Browser requirement: User must click something before audio can play
+            startButton.addEventListener("click", () => {
+                startButton.style.display = "none"; // Hide button after start
+                statusText.innerText = "Pikmin is ready!";
+                
+                // Play once immediately to "unlock" audio, then start loop
+                pikminSound.play();
+                playRandomly();
+            });
+        </script>
+    </body>
+</html>
